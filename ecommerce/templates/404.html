@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+<div class="empty-state">
+    <div class="empty-state-icon" aria-hidden="true">&#129488;</div>
+    <h2 class="empty-state-title">Page not found</h2>
+    <p class="empty-state-text">The page you're looking for doesn't exist or has moved.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to shop</a>
+</div>
+{% endblock %}

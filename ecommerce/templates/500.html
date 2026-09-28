@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<div class="empty-state">
+    <div class="empty-state-icon" aria-hidden="true">&#9888;&#65039;</div>
+    <h2 class="empty-state-title">Something went wrong</h2>
+    <p class="empty-state-text">We're experiencing a technical issue. Please try again in a moment.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to shop</a>
+</div>
+{% endblock %}

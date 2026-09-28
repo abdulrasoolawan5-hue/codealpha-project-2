@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-200;
+  }
+  body {
+    @apply bg-neutral-50 text-neutral-800 font-body antialiased;
+    line-height: 1.5;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply bg-white text-neutral-800 border border-neutral-200 hover:bg-neutral-100 active:scale-[0.98];
+  }
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent-dark active:scale-[0.98];
+  }
+  .btn-danger {
+    @apply bg-transparent text-red-600 border border-red-300 hover:bg-red-50 active:scale-[0.98];
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+  .btn-block {
+    @apply w-full;
+  }
+  .card {
+    @apply bg-white rounded-xl border border-neutral-200 overflow-hidden transition-all duration-200;
+  }
+  .card-hover {
+    @apply hover:shadow-md hover:-translate-y-0.5 hover:duration-200;
+  }
+  .input {
+    @apply w-full px-3 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-800 text-sm transition-all duration-150 focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .badge-success {
+    @apply bg-green-100 text-green-700;
+  }
+  .badge-warning {
+    @apply bg-amber-100 text-amber-700;
+  }
+  .badge-error {
+    @apply bg-red-100 text-red-600;
+  }
+  .toast {
+    @apply mt-2 px-3 py-2 rounded-lg text-sm animate-fade-in;
+  }
+  .toast-success {
+    @apply bg-green-50 text-green-700;
+  }
+  .toast-error {
+    @apply bg-red-50 text-red-600;
+  }
+}

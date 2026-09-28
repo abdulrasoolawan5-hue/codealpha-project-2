@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'home' %}">Shop</a>
+    <span aria-hidden="true">/</span>
+    <a href="/?category={{ product.category.slug }}">{{ product.category.name }}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ product.name }}</span>
+</nav>
+
+<section class="product-detail">
+    <div class="product-detail-image">
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="600" height="600">
+    </div>
+
+    <div class="product-detail-info">
+        <span class="product-card-category">{{ product.category.name }}</span>
+        <h1 class="product-detail-title">{{ product.name }}</h1>
+        <p class="price price-large">{{ product.price }}</p>
+
+        <div class="product-detail-stock">
+            {% if product.stock > 10 %}
+                <span class="stock-badge stock-in">In stock ({{ product.stock }} available)</span>
+            {% elif product.stock > 0 %}
+                <span class="stock-badge stock-low">Low stock — only {{ product.stock }} left</span>
+            {% else %}
+                <span class="stock-badge stock-out">Out of stock</span>
+            {% endif %}
+        </div>
+
+        <div class="product-detail-description">
+            <h2 class="product-detail-section-title">Description</h2>
+            <p>{{ product.description }}</p>
+        </div>
+
+        {% if product.in_stock %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form product-detail-form" data-product-id="{{ product.id }}">
+                {% csrf_token %}
+                <div class="form-group quantity-selector">
+                    <label for="quantity">Quantity</label>
+                    <div class="quantity-controls">
+                        <button type="button" class="btn btn-secondary qty-btn" data-action="decrease" aria-label="Decrease quantity">&minus;</button>
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            class="form-input quantity-input"
+                            value="1"
+                            min="1"
+                            max="{{ product.stock }}"
+                            aria-label="Quantity"
+                        >
+                        <button type="button" class="btn btn-secondary qty-btn" data-action="increase" aria-label="Increase quantity">&plus;</button>
+                    </div>
+                    <span class="quantity-hint text-muted">Max: {{ product.stock }}</span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" aria-label="Add to cart">
+                    Add to cart &mdash; <span class="price">{{ product.price }}</span>
+                </button>
+            </form>
+        {% else %}
+            <button class="btn btn-secondary btn-block btn-lg" disabled>Out of stock</button>
+        {% endif %}
+    </div>
+</section>
+
+{% if related_products %}
+    <section class="related-products">
+        <h2 class="related-products-title">You may also like</h2>
+        <div class="product-grid" role="list" aria-label="Related products">
+            {% for rp in related_products %}
+                <article class="product-card card" role="listitem">
+                    <a href="{{ rp.get_absolute_url }}" class="product-card-link" aria-label="View {{ rp.name }}">
+                        <div class="product-card-image">
+                            <img src="{{ rp.image_url }}" alt="{{ rp.name }}" loading="lazy" width="400" height="400">
+                        </div>
+                    </a>
+                    <div class="product-card-body">
+                        <span class="product-card-category">{{ rp.category.name }}</span>
+                        <a href="{{ rp.get_absolute_url }}" class="product-card-name">{{ rp.name }}</a>
+                        <div class="product-card-footer">
+                            <span class="price">{{ rp.price }}</span>
+                            {% if rp.in_stock %}
+                                <span class="stock-badge stock-in">In stock</span>
+                            {% else %}
+                                <span class="stock-badge stock-out">Out of stock</span>
+                            {% endif %}
+                        </div>
+                        {% if rp.in_stock %}
+                            <form method="post" action="{% url 'add_to_cart' rp.id %}" class="add-to-cart-form" data-product-id="{{ rp.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-primary btn-block btn-sm">Add to cart</button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-secondary btn-block btn-sm" disabled>Out of stock</button>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+{% endblock %}

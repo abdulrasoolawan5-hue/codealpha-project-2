@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card card">
+        <h1 class="auth-title">Create account</h1>
+        <p class="auth-subtitle">Join Commerce in seconds</p>
+
+        <form method="post" action="{% url 'register' %}" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input"
+                       value="{{ form_data.username|default:'' }}" required autocomplete="username" minlength="3">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-input"
+                       value="{{ form_data.email|default:'' }}" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="password1">Password</label>
+                <input type="password" id="password1" name="password1" class="form-input"
+                       required autocomplete="new-password" minlength="8">
+                <span class="text-muted" style="font-size: var(--fs-xs); display: block; margin-top: var(--space-1);">Minimum 8 characters</span>
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm password</label>
+                <input type="password" id="password2" name="password2" class="form-input"
+                       required autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Create account</button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

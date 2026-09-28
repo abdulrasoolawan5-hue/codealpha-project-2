@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1 class="page-title">Checkout</h1>
+</section>
+
+<div class="checkout-layout">
+    <form method="post" action="{% url 'checkout' %}" class="checkout-form" novalidate>
+        {% csrf_token %}
+        <div class="checkout-shipping">
+            <h2 class="checkout-section-title">Shipping Information</h2>
+            {% if form_errors %}
+                <div class="form-error-summary">
+                    <h3>Please fix the following:</h3>
+                    <ul>
+                        {% for field, errors in form_errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="full_name">Full name <span class="required-marker">*</span></label>
+                    <input type="text" id="full_name" name="full_name" class="form-input" value="{{ form_data.full_name|default:'' }}" required>
+                    {% if field_errors.full_name %}
+                        <span class="field-error">{{ field_errors.full_name|join:", " }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="required-marker">*</span></label>
+                    <input type="email" id="email" name="email" class="form-input" value="{{ form_data.email|default:'' }}" required>
+                    {% if field_errors.email %}
+                        <span class="field-error">{{ field_errors.email|join:", " }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone <span class="required-marker">*</span></label>
+                    <input type="tel" id="phone" name="phone" class="form-input" value="{{ form_data.phone|default:'' }}" required>
+                    {% if field_errors.phone %}
+                        <span class="field-error">{{ field_errors.phone|join:", " }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="city">City <span class="required-marker">*</span></label>
+                    <input type="text" id="city" name="city" class="form-input" value="{{ form_data.city|default:'' }}" required>
+                    {% if field_errors.city %}
+                        <span class="field-error">{{ field_errors.city|join:", " }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="postal_code">Postal code <span class="required-marker">*</span></label>
+                    <input type="text" id="postal_code" name="postal_code" class="form-input" value="{{ form_data.postal_code|default:'' }}" required>
+                    {% if field_errors.postal_code %}
+                        <span class="field-error">{{ field_errors.postal_code|join:", " }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group form-group-full">
+                    <label for="shipping_address">Shipping address <span class="required-marker">*</span></label>
+                    <textarea id="shipping_address" name="shipping_address" class="form-textarea" rows="3" required>{{ form_data.shipping_address|default:'' }}</textarea>
+                    {% if field_errors.shipping_address %}
+                        <span class="field-error">{{ field_errors.shipping_address|join:", " }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <aside class="checkout-summary" aria-label="Order summary">
+            <h2 class="checkout-section-title">Order Summary</h2>
+            <ul class="checkout-item-list">
+                {% for item in items %}
+                    <li class="checkout-item">
+                        <div class="checkout-item-info">
+                            <span class="checkout-item-name">{{ item.product.name }}</span>
+                            <span class="text-muted">{{ item.quantity }} &times; {{ item.product.price }}</span>
+                        </div>
+                        <span class="price">{{ item.subtotal }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="cart-summary-row cart-summary-total">
+                <span>Total</span>
+                <span class="price price-large">{{ cart.total_price }}</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Place order</button>
+        </aside>
+    </form>
+</div>
+{% endblock %}

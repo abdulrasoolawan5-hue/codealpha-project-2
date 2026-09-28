@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-subtitle">Your order history</p>
+</section>
+
+{% if orders %}
+    <div class="order-list">
+        {% for order in orders %}
+            <div class="order-card card">
+                <div class="order-card-header">
+                    <div>
+                        <span class="order-number">Order #{{ order.pk }}</span>
+                        <span class="order-date text-muted">{{ order.created_at|date:"M j, Y, g:i A" }}</span>
+                    </div>
+                    <span class="stock-badge stock-in">{{ order.status|title }}</span>
+                </div>
+                <div class="order-card-items">
+                    <ul class="checkout-item-list">
+                        {% for item in order.items.all %}
+                            <li class="checkout-item">
+                                <div class="checkout-item-info">
+                                    <span class="checkout-item-name">{{ item.product.name }}</span>
+                                    <span class="text-muted">{{ item.quantity }} &times; {{ item.unit_price }}</span>
+                                </div>
+                                <span class="price">{{ item.subtotal }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="order-card-footer">
+                    <div class="order-card-shipping text-muted">
+                        Shipping to: {{ order.full_name }}, {{ order.city }} {{ order.postal_code }}
+                    </div>
+                    <div class="order-card-total">
+                        <span class="text-muted">Total</span>
+                        <span class="price price-large">{{ order.total_amount }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon" aria-hidden="true">&#128230;</div>
+        <h2 class="empty-state-title">No orders yet</h2>
+        <p class="empty-state-text">When you place an order, it will appear here.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Start shopping</a>
+    </div>
+{% endif %}
+{% endblock %}

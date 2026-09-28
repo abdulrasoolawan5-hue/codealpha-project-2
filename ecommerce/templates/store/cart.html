@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1 class="page-title">Your Cart</h1>
+</section>
+
+{% if cart.is_empty %}
+    <div class="empty-state">
+        <div class="empty-state-icon" aria-hidden="true">&#128722;</div>
+        <h2 class="empty-state-title">Your cart is empty</h2>
+        <p class="empty-state-text">Browse our products and add something you like.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Continue shopping</a>
+    </div>
+{% else %}
+    <div class="cart-layout">
+        <div class="cart-items">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="cart-col-product">Product</th>
+                        <th scope="col" class="cart-col-price">Price</th>
+                        <th scope="col" class="cart-col-qty">Quantity</th>
+                        <th scope="col" class="cart-col-subtotal">Subtotal</th>
+                        <th scope="col" class="cart-col-remove"><span class="sr-only">Remove</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr class="cart-row" data-item-id="{{ item.id }}">
+                            <td class="cart-col-product">
+                                <div class="cart-product">
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="cart-product-img" width="80" height="80">
+                                    <div>
+                                        <a href="{{ item.product.get_absolute_url }}" class="cart-product-name">{{ item.product.name }}</a>
+                                        <span class="cart-product-category text-muted">{{ item.product.category.name }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cart-col-price">
+                                <span class="price">{{ item.product.price }}</span>
+                            </td>
+                            <td class="cart-col-qty">
+                                <div class="quantity-controls quantity-controls-sm">
+                                    <button type="button" class="btn btn-secondary qty-btn qty-update"
+                                        data-action="decrease" data-item-id="{{ item.id }}" data-max="{{ item.product.stock }}"
+                                        aria-label="Decre quantity of {{ item.product.name }}">&minus;</button>
+                                    <input
+                                        type="number"
+                                        class="form-input quantity-input qty-input-field"
+                                        value="{{ item.quantity }}"
+                                        min="1"
+                                        max="{{ item.product.stock }}"
+                                        data-item-id="{{ item.id }}"
+                                        aria-label="Quantity of {{ item.product.name }}"
+                                    >
+                                    <button type="button" class="btn btn-secondary qty-btn qty-update"
+                                        data-action="increase" data-item-id="{{ item.id }}" data-max="{{ item.product.stock }}"
+                                        aria-label="Increase quantity of {{ item.product.name }}">&plus;</button>
+                                </div>
+                            </td>
+                            <td class="cart-col-subtotal">
+                                <span class="price subtotal-display" data-item-id="{{ item.id }}">{{ item.subtotal }}</span>
+                            </td>
+                            <td class="cart-col-remove">
+                                <button type="button" class="btn btn-danger btn-sm remove-btn" data-item-id="{{ item.id }}"
+                                    aria-label="Remove {{ item.product.name }} from cart">Remove</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <aside class="cart-summary" aria-label="Order summary">
+            <h2 class="cart-summary-title">Order Summary</h2>
+            <div class="cart-summary-row">
+                <span>Items</span>
+                <span id="summary-item-count">{{ cart.total_quantity }}</span>
+            </div>
+            <div class="cart-summary-row cart-summary-total">
+                <span>Total</span>
+                <span class="price price-large" id="cart-total-display">{{ cart.total_price }}</span>
+            </div>
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block btn-lg">Proceed to checkout</a>
+            <a href="{% url 'home' %}" class="btn btn-secondary btn-block mt-4">Continue shopping</a>
+        </aside>
+    </div>
+{% endif %}
+{% endblock %}

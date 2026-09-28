@@ -1,0 +1,114 @@
+# Commerce — Simple E-Commerce Store
+
+A full-stack e-commerce website where customers can browse products, manage a shopping cart, register or log in, and place orders. Built as a learning project covering frontend, backend services, and database design.
+
+## Features
+
+- **Product listing** with images, prices, category labels, and live stock status
+- **Search, category filter, and sorting** on the catalogue page
+- **Product details page** with full description and add-to-cart
+- **Shopping cart** with quantity updates, item removal, and running total
+- **Order processing** — checkout creates an order and its items
+- **User registration and login** through Supabase Auth
+- **Database** storing products, users, and orders in PostgreSQL
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | React, TypeScript, Vite |
+| Styling | Tailwind CSS |
+| Shared state | React Context (auth and cart) |
+| Backend and database | Supabase (PostgreSQL, Auth, Row Level Security) |
+
+Supabase acts as the backend: it provides the hosted PostgreSQL database, user authentication, and access rules (Row Level Security) that decide which rows each user can read or change.
+
+## Prerequisites
+
+- Node.js 20 or newer
+- npm (comes with Node.js)
+- A free Supabase project (https://supabase.com)
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up the database
+
+1. Create a new project in Supabase.
+2. Open **SQL Editor** and run the migration files from the `supabase/` folder in order. They create the tables and add sample products.
+
+### 3. Configure environment variables
+
+Create a file named `.env` in the project root:
+
+```
+VITE_SUPABASE_URL=your-project-url
+VITE_SUPABASE_ANON_KEY=your-anon-public-key
+```
+
+Both values are in Supabase under **Project Settings → API**. Never commit real keys; `.env` is listed in `.gitignore`.
+
+### 4. Run the app
+
+```bash
+npm run dev
+```
+
+Open **http://localhost:5173**.
+
+### 5. Production build
+
+```bash
+npm run build
+```
+
+The optimized files are written to `dist/`.
+
+## How to Try It
+
+1. Browse the catalogue and use the search box, category filter, and sort menu.
+2. Open a product to see its details.
+3. Click **Add to cart**, then open **Cart** to change quantities.
+4. Click **Register**, create an account, and log in.
+5. Check out to place an order and confirm it is saved.
+
+## Project Structure
+
+```
+src/
+  components/    reusable UI pieces (navbar, product card, filters)
+  context/       shared state for auth and cart
+  lib/           helpers and the Supabase client
+  pages/         one file per screen (shop, cart, login, register, ...)
+  types/         TypeScript type definitions
+  App.tsx        routes
+  main.tsx       app entry point
+  index.css      Tailwind styles
+supabase/        database migrations (tables, policies, seed data)
+public/          static assets
+```
+
+## Database Tables
+
+[List the tables created in the supabase/ folder, for example: products, categories, profiles, orders, order_items.]
+
+## Security Notes
+
+- Passwords are handled by Supabase Auth and are never stored in plain text.
+- Row Level Security policies make sure users can only read and change their own orders.
+- Only the public anon key is used in the browser; secret keys are never exposed.
+- Secrets live in `.env`, which is excluded from version control.
+
+## Known Limitations
+
+- Payments are simulated: checkout records the order but does not charge a real card.
+- [Add anything else that is unfinished, so the reviewer knows it is intentional.]
+
+## Author
+
+[Your name] — [course / internship / submission name]
